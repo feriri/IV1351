@@ -143,7 +143,7 @@ public class SoundGoodDAO {
 
     private void prepareStatements() throws SQLException {
         findAllAvailableInstrumentsStmt = connection.prepareStatement("SELECT * FROM " + RENTAL_INSTRUMENT_TABLE_NAME
-                + " WHERE " + RETURN_DATE_COLUMN_NAME + " IS NULL AND " + INSTRUMENT_COLUMN_NAME + " = ?" );
+                + " WHERE " + RETURN_DATE_COLUMN_NAME + " IS NULL AND " + INSTRUMENT_COLUMN_NAME + " = ?");
         rentInstrumentStmt = connection.prepareStatement("UPDATE " + RENTAL_INSTRUMENT_TABLE_NAME + " SET " + RETURN_DATE_COLUMN_NAME
                 + " = ?, " + STUDENT_ID_FK_COLUMN_NAME + " = ? WHERE " + INSTRUMENT_ID_PK_COLUMN_NAME + " = ?");
         terminateRentalStmt = connection.prepareStatement("UPDATE " + RENTAL_INSTRUMENT_TABLE_NAME + " SET " + RETURN_DATE_COLUMN_NAME
