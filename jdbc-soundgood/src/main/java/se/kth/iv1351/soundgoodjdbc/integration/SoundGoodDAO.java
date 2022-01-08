@@ -84,7 +84,7 @@ public class SoundGoodDAO {
                     handleException(failureMsg, null);
                 }
                 connection.commit();
-                System.out.println("The instrument " + instrumentID + " is now rented to student " + studentID);
+                System.out.println("Instrument " + instrumentID + " is now being rented to student " + studentID);
             } else System.out.println("The maximum number of rentals exceeded");
         } catch(SQLException sqle){
             handleException(failureMsg, sqle);
