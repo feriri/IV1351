@@ -33,6 +33,7 @@ SELECT employment_id AS instructor, COUNT(*) FROM lesson WHERE EXTRACT(year FROM
 AND EXTRACT(month FROM begin_date)=EXTRACT(month FROM current_date) GROUP BY employment_id HAVING COUNT(*) > 3 ORDER BY employment_id;
 
 
+
 4) List all ensembles held during the next week, sorted by music genre and weekday.
 For each ensemble tell whether it's full booked, has 1-2 seats left or has more seats left.
 Hint: you might want to use a CASE statement in your query to produce the desired output.
