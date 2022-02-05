@@ -1,0 +1,49 @@
+1) Show the number of lessons given per month during a specified year. 
+It shall be possible to retrieve the total number of lessons per month (just one number per month)
+and the specific number of individual lessons, group lessons and ensembles (three numbers per month).
+This query is expected to be performed a few times per week.
+
+CREATE VIEW first_query_specific AS
+SELECT EXTRACT(month FROM begin_date) as month, lesson_type,
+count(*) FROM lesson WHERE EXTRACT(year FROM begin_date)=2022
+GROUP BY EXTRACT(month from begin_date), lesson_type
+ORDER BY EXTRACT(month FROM begin_date);
+
+CREATE VIEW first_query_total AS
+SELECT EXTRACT(month FROM begin_date) as month, count(*) FROM lesson
+WHERE EXTRACT(year FROM begin_date)=2022 GROUP BY EXTRACT(month from begin_date)
+ORDER BY EXTRACT(month FROM begin_date);
+
+
+
+2) The same as above, but retrieve the average number of lessons per month during the entire year, instead of the total for each month.
+
+CREATE VIEW second_query AS
+SELECT AVG(count) FROM ( SELECT count(*) AS count FROM lesson
+WHERE EXTRACT(year FROM begin_date)=2021 GROUP BY EXTRACT(month from begin_date)) AS a;
+
+
+
+3) List all instructors who has given more than a specific number of lessons during the current month.
+Sum all lessons, independent of type, and sort the result by the number of given lessons.
+This query will be used to find instructors risking to work too much, and will be executed daily.
+
+CREATE VIEW third_query AS
+SELECT employment_id AS instructor, COUNT(*) FROM lesson WHERE EXTRACT(year FROM begin_date)=EXTRACT(year from current_date)
+AND EXTRACT(month FROM begin_date)=EXTRACT(month FROM current_date) GROUP BY employment_id HAVING COUNT(*) > 3 ORDER BY employment_id;
+
+
+4) List all ensembles held during the next week, sorted by music genre and weekday.
+For each ensemble tell whether it's full booked, has 1-2 seats left or has more seats left.
+Hint: you might want to use a CASE statement in your query to produce the desired output.
+
+CREATE VIEW fourth_query AS
+SELECT lesson_type, genre, begin_date, CASE
+WHEN number_of_students = max_spots THEN 'Class is full!'
+WHEN number_of_students = ( max_spots -1) THEN '1 seat left'
+WHEN number_of_students = (max_spots - 2) THEN '2 seats left'
+WHEN number_of_students < (3) THEN ' Many seats left' END as spots
+FROM lesson WHERE (lesson_type = 'Ensemble') AND
+(begin_date BETWEEN current_date AND current_date + interval '7 day') ORDER BY genre;
+
+
